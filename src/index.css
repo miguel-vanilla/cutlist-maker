@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    @apply transition-colors;
+  }
+  
+  body {
+    @apply bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 antialiased;
+  }
+}
+
+@layer components {
+  .number-input {
+    @apply relative;
+  }
+
+  .number-input input[type="number"] {
+    @apply pr-6;
+  }
+
+  .number-input input[type="number"]::-webkit-inner-spin-button {
+    @apply opacity-100 cursor-pointer h-[calc(100%-2px)] w-6 hover:text-blue-600 transition-colors appearance-none m-0;
+  }
+
+  select {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e") !important;
+    background-position: right 0.5rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
+@media print {
+  body {
+    background: white !important;
+  }
+  
+  .print\:hidden {
+    display: none !important;
+  }
+  
+  .bg-white {
+    background-color: white !important;
+    box-shadow: none !important;
+  }
+  
+  .rounded-xl {
+    border-radius: 0 !important;
+  }
+  
+  .shadow-sm {
+    box-shadow: none !important;
+  }
+  
+  .border {
+    border: none !important;
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "app": {
+    "title": "Cutlist Maker",
+    "subtitle": "Optimize your material cutting layout",
+    "delete": {
+      "title": "Delete Panel",
+      "message": "Are you sure you want to delete this {{type}}?"
+    },
+    "settings": {
+      "title": "Settings",
+      "units": "Units",
+      "currency": "Currency",
+      "kerfWidth": "Blade Thickness (Kerf)",
+      "considerGrain": "Consider Grain Direction",
+      "calculatePrice": "Calculate Price",
+      "includeEdgeBanding": "Include Edge Banding",
+      "includeEdgeTrimming": "Include Edge Trimming",
+      "units_options": {
+        "mm": "Millimeters (mm)",
+        "cm": "Centimeters (cm)",
+        "inches": "Inches"
+      },
+      "currency_options": {
+        "eur": "Euro (€)",
+        "usd": "Dollar ($)",
+        "jpy": "Yen (¥)",
+        "cny": "RMB (¥)"
+      }
+    },
+    "panels": {
+      "stock": {
+        "title": "Available Stock Panels",
+        "add": "Add Stock Panel",
+        "length": "Length",
+        "width": "Width",
+        "quantity": "Quantity",
+        "dimensions": "Panel Dimensions",
+        "length": "Length",
+        "width": "Width",
+        "quantity": "Quantity",
+        "price": "Price"
+      },
+      "required": {
+        "title": "Required Panels",
+        "add": "Add Required Panel",
+        "length": "Length",
+        "width": "Width",
+        "quantity": "Quantity",
+        "label": "Panel Label",
+        "color": "Color"
+      }
+    },
+    "calculate": "Calculate Layout",
+    "results": {
+      "title": "Results",
+      "calculating": "Calculating layout...",
+      "additional_panel_needed": {
+        "title": "Additional Stock Panel Needed",
+        "message": "The required panels exceed the available stock panel area. You need either:",
+        "option1": "An additional stock panel of the same size",
+        "option2": "A larger stock panel of at least"
+      },
+      "navigation": {
+        "previous": "Previous",
+        "next": "Next",
+        "panel_of": "Stock Panel {{current}} of {{total}}"
+      },
+      "remaining": {
+        "title": "Remaining Panels",
+        "panel": "Panel {{number}}"
+      },
+      "stockArea": "Total Stock Panel Area Used",
+      "requiredArea": "Total Required Panel Area",
+      "yield": "Material Yield",
+      "panelsUsed": "Stock Panels Used",
+      "cutLength": "Total Cut Length",
+      "cost": "Estimated Cost",
+      "print": "Print Layout & Summary",
+      "download": "Download PDF"
+    },
+    "validation": {
+      "dimensions_required": "Please fill in all panel dimensions and quantities"
+    }
+  }
+}

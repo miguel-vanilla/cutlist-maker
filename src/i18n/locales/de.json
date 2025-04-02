@@ -1,0 +1,85 @@
+{
+  "app": {
+    "title": "Zuschnittliste",
+    "subtitle": "Optimieren Sie Ihr Materialschnittlayout",
+    "delete": {
+      "title": "Panel löschen",
+      "message": "Möchten Sie dieses {{type}} wirklich löschen?"
+    },
+    "settings": {
+      "title": "Einstellungen",
+      "units": "Einheiten",
+      "currency": "Währung",
+      "kerfWidth": "Sägeblattdicke (Schnittfuge)",
+      "considerGrain": "Maserungsrichtung berücksichtigen",
+      "calculatePrice": "Preis berechnen",
+      "includeEdgeBanding": "Kantenband einbeziehen",
+      "includeEdgeTrimming": "Kantenbeschnitt einbeziehen",
+      "units_options": {
+        "mm": "Millimeter (mm)",
+        "cm": "Zentimeter (cm)",
+        "inches": "Zoll"
+      },
+      "currency_options": {
+        "eur": "Euro (€)",
+        "usd": "Dollar ($)",
+        "jpy": "Yen (¥)",
+        "cny": "RMB (¥)"
+      }
+    },
+    "panels": {
+      "stock": {
+        "title": "Verfügbare Platten",
+        "add": "Platte hinzufügen",
+        "length": "Länge",
+        "width": "Breite",
+        "quantity": "Menge",
+        "dimensions": "Plattenmaße",
+        "length": "Länge",
+        "width": "Breite",
+        "quantity": "Menge",
+        "price": "Preis"
+      },
+      "required": {
+        "title": "Benötigte Platten",
+        "add": "Platte hinzufügen",
+        "length": "Länge",
+        "width": "Breite",
+        "quantity": "Menge",
+        "label": "Plattenbezeichnung",
+        "color": "Farbe"
+      }
+    },
+    "calculate": "Layout berechnen",
+    "results": {
+      "title": "Ergebnisse",
+      "calculating": "Layout wird berechnet...",
+      "additional_panel_needed": {
+        "title": "Zusätzliche Platte benötigt",
+        "message": "Die benötigten Platten übersteigen die verfügbare Plattenfläche. Sie benötigen entweder:",
+        "option1": "Eine zusätzliche Platte der gleichen Größe",
+        "option2": "Eine größere Platte von mindestens"
+      },
+      "navigation": {
+        "previous": "Vorherige",
+        "next": "Nächste",
+        "panel_of": "Platte {{current}} von {{total}}"
+      },
+      "remaining": {
+        "title": "Verbleibende Platten",
+        "panel": "Platte {{number}}"
+      },
+      "stockArea": "Gesamtfläche der verwendeten Platten",
+      "requiredArea": "Benötigte Gesamtfläche",
+      "yield": "Materialausnutzung",
+      "panelsUsed": "Verwendete Platten",
+      "cutLength": "Gesamtschnittlänge",
+      "cost": "Geschätzte Kosten",
+      "print": "Layout & Zusammenfassung drucken",
+      "download": "PDF herunterladen"
+    },
+    "validation": {
+      "dimensions_required": "Bitte füllen Sie alle Plattenmaße und Mengen aus"
+    }
+  }
+}

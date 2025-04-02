@@ -1,0 +1,85 @@
+{
+  "app": {
+    "title": "Optimizador de Cortes",
+    "subtitle": "Optimice su diseño de corte de material",
+    "delete": {
+      "title": "Eliminar Panel",
+      "message": "¿Está seguro de que desea eliminar este {{type}}?"
+    },
+    "settings": {
+      "title": "Configuración",
+      "units": "Unidades",
+      "currency": "Moneda",
+      "kerfWidth": "Espesor de la Hoja (Corte)",
+      "considerGrain": "Considerar Dirección del Grano",
+      "calculatePrice": "Calcular Precio",
+      "includeEdgeBanding": "Incluir Canteado",
+      "includeEdgeTrimming": "Incluir Recorte de Bordes",
+      "units_options": {
+        "mm": "Milímetros (mm)",
+        "cm": "Centímetros (cm)",
+        "inches": "Pulgadas"
+      },
+      "currency_options": {
+        "eur": "Euro (€)",
+        "usd": "Dólar ($)",
+        "jpy": "Yen (¥)",
+        "cny": "RMB (¥)"
+      }
+    },
+    "panels": {
+      "stock": {
+        "title": "Paneles Disponibles",
+        "add": "Agregar Panel",
+        "length": "Largo",
+        "width": "Ancho",
+        "quantity": "Cantidad",
+        "dimensions": "Dimensiones del Panel",
+        "length": "Largo",
+        "width": "Ancho",
+        "quantity": "Cantidad",
+        "price": "Precio"
+      },
+      "required": {
+        "title": "Paneles Requeridos",
+        "add": "Agregar Panel",
+        "length": "Largo",
+        "width": "Ancho",
+        "quantity": "Cantidad",
+        "label": "Etiqueta del Panel",
+        "color": "Color"
+      }
+    },
+    "calculate": "Calcular Diseño",
+    "results": {
+      "title": "Resultados",
+      "calculating": "Calculando diseño...",
+      "additional_panel_needed": {
+        "title": "Se Necesita Panel Adicional",
+        "message": "Los paneles requeridos exceden el área disponible. Necesita:",
+        "option1": "Un panel adicional del mismo tamaño",
+        "option2": "Un panel más grande de al menos"
+      },
+      "navigation": {
+        "previous": "Anterior",
+        "next": "Siguiente",
+        "panel_of": "Panel {{current}} de {{total}}"
+      },
+      "remaining": {
+        "title": "Paneles Restantes",
+        "panel": "Panel {{number}}"
+      },
+      "stockArea": "Área Total de Paneles Usados",
+      "requiredArea": "Área Total Requerida",
+      "yield": "Rendimiento del Material",
+      "panelsUsed": "Paneles Utilizados",
+      "cutLength": "Longitud Total de Corte",
+      "cost": "Costo Estimado",
+      "print": "Imprimir Diseño y Resumen",
+      "download": "Descargar PDF"
+    },
+    "validation": {
+      "dimensions_required": "Por favor complete todas las dimensiones y cantidades de los paneles"
+    }
+  }
+}

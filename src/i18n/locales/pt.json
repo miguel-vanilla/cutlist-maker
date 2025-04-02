@@ -1,0 +1,85 @@
+{
+  "app": {
+    "title": "Otimizador de Corte",
+    "subtitle": "Otimize seu layout de corte de material",
+    "delete": {
+      "title": "Excluir Painel",
+      "message": "Tem certeza que deseja excluir este {{type}}?"
+    },
+    "settings": {
+      "title": "Configurações",
+      "units": "Unidades",
+      "currency": "Moeda",
+      "kerfWidth": "Espessura da Lâmina (Corte)",
+      "considerGrain": "Considerar Direção do Grão",
+      "calculatePrice": "Calcular Preço",
+      "includeEdgeBanding": "Incluir Fita de Borda",
+      "includeEdgeTrimming": "Incluir Aparamento de Bordas",
+      "units_options": {
+        "mm": "Milímetros (mm)",
+        "cm": "Centímetros (cm)",
+        "inches": "Polegadas"
+      },
+      "currency_options": {
+        "eur": "Euro (€)",
+        "usd": "Dólar ($)",
+        "jpy": "Iene (¥)",
+        "cny": "RMB (¥)"
+      }
+    },
+    "panels": {
+      "stock": {
+        "title": "Painéis Disponíveis",
+        "add": "Adicionar Painel",
+        "length": "Comprimento",
+        "width": "Largura",
+        "quantity": "Quantidade",
+        "dimensions": "Dimensões do Painel",
+        "length": "Comprimento",
+        "width": "Largura",
+        "quantity": "Quantidade",
+        "price": "Preço"
+      },
+      "required": {
+        "title": "Painéis Necessários",
+        "add": "Adicionar Painel",
+        "length": "Comprimento",
+        "width": "Largura",
+        "quantity": "Quantidade",
+        "label": "Rótulo do Painel",
+        "color": "Cor"
+      }
+    },
+    "calculate": "Calcular Layout",
+    "results": {
+      "title": "Resultados",
+      "calculating": "Calculando layout...",
+      "additional_panel_needed": {
+        "title": "Painel Adicional Necessário",
+        "message": "Os painéis necessários excedem a área disponível. Você precisa de:",
+        "option1": "Um painel adicional do mesmo tamanho",
+        "option2": "Um painel maior de pelo menos"
+      },
+      "navigation": {
+        "previous": "Anterior",
+        "next": "Próximo",
+        "panel_of": "Painel {{current}} de {{total}}"
+      },
+      "remaining": {
+        "title": "Painéis Restantes",
+        "panel": "Painel {{number}}"
+      },
+      "stockArea": "Área Total de Painéis Usados",
+      "requiredArea": "Área Total Necessária",
+      "yield": "Rendimento do Material",
+      "panelsUsed": "Painéis Utilizados",
+      "cutLength": "Comprimento Total de Corte",
+      "cost": "Custo Estimado",
+      "print": "Imprimir Layout e Resumo",
+      "download": "Baixar PDF"
+    },
+    "validation": {
+      "dimensions_required": "Por favor preencha todas as dimensões e quantidades dos painéis"
+    }
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "app": {
+    "title": "Optimiseur de Découpe",
+    "subtitle": "Optimisez votre plan de découpe de matériaux",
+    "delete": {
+      "title": "Supprimer le Panneau",
+      "message": "Êtes-vous sûr de vouloir supprimer ce {{type}} ?"
+    },
+    "settings": {
+      "title": "Paramètres",
+      "units": "Unités",
+      "currency": "Devise",
+      "kerfWidth": "Épaisseur de Lame (Trait)",
+      "considerGrain": "Considérer le Sens du Fil",
+      "calculatePrice": "Calculer le Prix",
+      "includeEdgeBanding": "Inclure le Placage",
+      "includeEdgeTrimming": "Inclure la Coupe des Bords",
+      "units_options": {
+        "mm": "Millimètres (mm)",
+        "cm": "Centimètres (cm)",
+        "inches": "Pouces"
+      },
+      "currency_options": {
+        "eur": "Euro (€)",
+        "usd": "Dollar ($)",
+        "jpy": "Yen (¥)",
+        "cny": "RMB (¥)"
+      }
+    },
+    "panels": {
+      "stock": {
+        "title": "Panneaux Disponibles",
+        "add": "Ajouter un Panneau",
+        "length": "Longueur",
+        "width": "Largeur",
+        "quantity": "Quantité",
+        "dimensions": "Dimensions du Panneau",
+        "length": "Longueur",
+        "width": "Largeur",
+        "quantity": "Quantité",
+        "price": "Prix"
+      },
+      "required": {
+        "title": "Panneaux Requis",
+        "add": "Ajouter un Panneau",
+        "length": "Longueur",
+        "width": "Largeur",
+        "quantity": "Quantité",
+        "label": "Étiquette du Panneau",
+        "color": "Couleur"
+      }
+    },
+    "calculate": "Calculer le Plan",
+    "results": {
+      "title": "Résultats",
+      "calculating": "Calcul du plan en cours...",
+      "additional_panel_needed": {
+        "title": "Panneau Supplémentaire Nécessaire",
+        "message": "Les panneaux requis dépassent la surface disponible. Vous avez besoin de :",
+        "option1": "Un panneau supplémentaire de même taille",
+        "option2": "Un panneau plus grand d'au moins"
+      },
+      "navigation": {
+        "previous": "Précédent",
+        "next": "Suivant",
+        "panel_of": "Panneau {{current}} sur {{total}}"
+      },
+      "remaining": {
+        "title": "Panneaux Restants",
+        "panel": "Panneau {{number}}"
+      },
+      "stockArea": "Surface Totale Utilisée",
+      "requiredArea": "Surface Totale Requise",
+      "yield": "Rendement Matière",
+      "panelsUsed": "Panneaux Utilisés",
+      "cutLength": "Longueur Totale de Coupe",
+      "cost": "Coût Estimé",
+      "print": "Imprimer Plan et Résumé",
+      "download": "Télécharger PDF"
+    },
+    "validation": {
+      "dimensions_required": "Veuillez remplir toutes les dimensions et quantités des panneaux"
+    }
+  }
+}
