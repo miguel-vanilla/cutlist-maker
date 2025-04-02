@@ -5,8 +5,8 @@ Stop wasting material and time on your cutting projects!
 
 Tired of material scraps piling up? Cutlist Maker is your free, smart web application designed to revolutionize how you cut sheet materials like wood, metal, glass, or fabric. It intelligently calculates the most efficient cutting layouts based on your available stock and required parts, minimizing waste and maximizing your savings.
 
-Try the free demo now at: cut.cloudhost.pt
-
+Try the free demo now at: https://cut.cloudhost.pt
+------------------------------------------
 Stop wasting material and time! Cutlist Maker is a smart web application designed to help you find the most efficient way to cut sheet materials like wood, metal, glass, or fabric for your projects. It calculates the optimal layout based on your available stock and required parts, minimizing waste and potentially saving you money.
 (Consider adding a screenshot or GIF of the app in action here!)
 
