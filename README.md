@@ -1,5 +1,5 @@
 ✨ Cutlist Maker ✨
-
+--------------------
 Stop wasting material and time on your cutting projects!
 
 
