@@ -4,36 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Header } from './components/Header';
 import { Results } from './components/Results';
 import { Modal } from './components/Modal';
-
-type Unit = 'mm' | 'cm' | 'inches';
-type Currency = '€' | '$' | '¥' | '¥';
-
-interface AppSettings {
-  units: Unit;
-  currency: Currency;
-  kerfWidth: number;
-  considerGrain: boolean;
-  calculatePrice: boolean;
-  includeEdgeBanding: boolean;
-  edgeBandingThickness: number;
-  includeEdgeTrimming: boolean;
-  edgeTrimAmount: number;
-}
-
-interface StockPanel {
-  length: number;
-  width: number;
-  quantity: number;
-  price?: number;
-}
-
-interface RequiredPanel {
-  length: number;
-  width: number;
-  quantity: number;
-  label?: string;
-  color?: string;
-}
+import { Unit, Currency, AppSettings, StockPanel, RequiredPanel } from './types';
 
 function App() {
   const { t } = useTranslation();
