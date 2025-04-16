@@ -6,7 +6,7 @@ self.onmessage = (e: MessageEvent) => {
   
   try {
     // new a packer
-    const packer = PackerFactory.createPacker(PackerTypes.MAX_RECTS, settings);
+    const packer = PackerFactory.createPacker(PackerTypes.LEFT_BOTTOM, settings);
     packer.addStockPanel(stockPanels);
     packer.addRequiredPanel(requiredPanels);
     const result = packer.pack();
