@@ -19,6 +19,7 @@ export interface StockPanel {
   width: number;
   quantity: number;
   price?: number;
+  index?: number; //the index of StockPanel
 }
 
 export interface RequiredPanel {
@@ -27,6 +28,7 @@ export interface RequiredPanel {
   quantity: number;
   label?: string;
   color?: string;
+  index?: number; //the index of RequiredPanel
 }
 
 
@@ -42,6 +44,7 @@ export interface AdjustedPanel extends RequiredPanel {
     width: number;
     length: number;
     label?: string;
+    color?: string;
     efficiency: number;
   }
   
@@ -73,3 +76,33 @@ export interface AdjustedPanel extends RequiredPanel {
       estimatedCost?: number;
     };
   }
+
+  export interface ResultsProps {
+    calculatePrice: boolean;
+    settings: {
+      currency: string;
+      kerfWidth: number;
+      considerGrain: boolean;
+      includeEdgeBanding: boolean;
+      edgeBandingThickness: number;
+      includeEdgeTrimming: boolean;
+      edgeTrimAmount: number;
+    };
+    stockPanels: StockPanel[];
+    requiredPanels: RequiredPanel[];
+  }
+  
+  export interface PanelLayout {
+    width: number;
+    length: number;
+    cuts: {
+      x: number;
+      y: number;
+      width: number;
+      length: number;
+      label?: string;
+      color?: string;
+      rotated?: boolean;
+    }[];
+  }
+  
