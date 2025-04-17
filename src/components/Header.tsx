@@ -12,7 +12,8 @@ const languages = [
   { code: 'de', name: 'Deutsch' },
   { code: 'es', name: 'Español' },
   { code: 'fr', name: 'Français' },
-  { code: 'pt', name: 'Português' }
+  { code: 'pt', name: 'Português' },
+  { code: 'zh', name: '简体中文' }
 ];
 
 export function Header({ isDark, onThemeToggle }: HeaderProps) {

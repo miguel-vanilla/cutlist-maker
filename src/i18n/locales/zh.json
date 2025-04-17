@@ -1,0 +1,87 @@
+{
+    "app": {
+      "title": "切割清单生成器",
+      "subtitle": "优化您的材料切割布局",
+      "delete": {
+        "title": "删除面板",
+        "message": "确定要删除此{{type}}吗？"
+      },
+      "settings": {
+        "title": "设置",
+        "units": "单位",
+        "currency": "货币",
+        "kerfWidth": "锯片厚度（锯缝）",
+        "considerGrain": "考虑纹理方向",
+        "calculatePrice": "计算价格",
+        "includeEdgeBanding": "包含封边",
+        "includeEdgeTrimming": "包含修边",
+        "units_options": {
+          "mm": "毫米（mm）",
+          "cm": "厘米（cm）",
+          "inches": "英寸"
+        },
+        "currency_options": {
+          "eur": "欧元（€）",
+          "usd": "美元（$）",
+          "jpy": "日元（¥）",
+          "cny": "人民币（¥）"
+        },
+        "packer": "排料算法",
+        "packerType": {
+          "leftBottom": "左下优先算法",
+          "maxRects": "最大矩形算法"
+        }
+      },
+      "panels": {
+        "stock": {
+          "title": "可用库存面板",
+          "add": "添加库存面板",
+          "length": "长度",
+          "width": "宽度",
+          "quantity": "数量",
+          "dimensions": "面板尺寸",
+          "price": "价格"
+        },
+        "required": {
+          "title": "所需面板",
+          "add": "添加所需面板",
+          "length": "长度",
+          "width": "宽度",
+          "quantity": "数量",
+          "label": "面板标签",
+          "color": "颜色"
+        }
+      },
+      "calculate": "计算布局",
+      "results": {
+        "title": "结果",
+        "calculating": "正在计算布局...",
+        "additional_panel_needed": {
+          "title": "需要额外库存面板",
+          "message": "所需面板超出可用库存面板面积。您需要：",
+          "option1": "一块相同尺寸的额外库存面板",
+          "option2": "一块至少尺寸为以下的大型库存面板"
+        },
+        "navigation": {
+          "previous": "上一页",
+          "next": "下一页",
+          "panel_of": "库存面板 {{current}} / {{total}}"
+        },
+        "remaining": {
+          "title": "剩余面板",
+          "panel": "面板 {{number}}"
+        },
+        "stockArea": "已用库存面板总面积",
+        "requiredArea": "所需面板总面积",
+        "yield": "材料利用率",
+        "panelsUsed": "使用的库存面板数量",
+        "cutLength": "总切割长度",
+        "cost": "预估成本",
+        "print": "打印布局与摘要",
+        "download": "下载PDF"
+      },
+      "validation": {
+        "dimensions_required": "请填写所有面板尺寸和数量"
+      }
+    }
+  }
