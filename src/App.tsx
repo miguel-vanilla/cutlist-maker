@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
-import { Settings, Trash2, Plus, Calculator, Box, Layers, Ruler, CircleDollarSign, Scissors, Heart } from 'lucide-react';
+import { Settings, Trash2, Plus, Calculator, Box, Layers, Ruler, CircleDollarSign, Scissors, Heart, Package } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Header } from './components/Header';
 import { Results } from './components/Results';
 import { Modal } from './components/Modal';
-import { Unit, Currency, AppSettings, StockPanel, RequiredPanel } from './types';
+import { Unit, Currency, AppSettings, StockPanel, RequiredPanel, PackerType } from './types';
 
 function App() {
   const { t } = useTranslation();
@@ -42,8 +42,9 @@ function App() {
   } | null>(null);
 
   const [settings, setSettings] = React.useState<AppSettings>({
-    units: 'mm',
-    currency: '€',
+    packerType: PackerType.LEFTBOTTOM,
+    units: Unit.MM,
+    currency: Currency.EURO,
     kerfWidth: 3,
     considerGrain: false,
     calculatePrice: false,
@@ -125,6 +126,25 @@ function App() {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 <div className="flex items-center gap-2">
+                  <Package className="w-4 h-4 text-gray-600" />
+                  {t('app.settings.packer')}
+                </div>
+              </label>
+              <div className="relative">
+                <select
+                  className="w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 pl-10 pr-3 py-2 text-gray-900 dark:text-gray-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none appearance-none transition-colors"
+                  value={settings.packerType}
+                  onChange={(e) => setSettings({ ...settings, packerType: e.target.value as typeof PackerType[keyof typeof PackerType] })}
+                >
+                  <option value="LeftBottom">{t('app.settings.packerType.leftBottom')}</option>
+                  <option value="MaxRects">{t('app.settings.packerType.maxRects')}</option>
+                </select>
+                <Package className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+              </div>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                <div className="flex items-center gap-2">
                   <Ruler className="w-4 h-4 text-gray-600" />
                   {t('app.settings.units')}
                 </div>
@@ -133,7 +153,7 @@ function App() {
                 <select
                   className="w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 pl-10 pr-3 py-2 text-gray-900 dark:text-gray-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none appearance-none transition-colors"
                   value={settings.units}
-                  onChange={(e) => setSettings({ ...settings, units: e.target.value as Unit })}
+                  onChange={(e) => setSettings({ ...settings, units: e.target.value as typeof Unit[keyof typeof Unit] })}
                 >
                   <option value="mm">{t('app.settings.units_options.mm')}</option>
                   <option value="cm">{t('app.settings.units_options.cm')}</option>
@@ -153,7 +173,7 @@ function App() {
                 <select
                   className="w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 pl-10 pr-3 py-2 text-gray-900 dark:text-gray-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none appearance-none transition-colors"
                   value={settings.currency}
-                  onChange={(e) => setSettings({ ...settings, currency: e.target.value as Currency })}
+                  onChange={(e) => setSettings({ ...settings, currency: e.target.value as typeof Currency[keyof typeof Currency] })}
                 >
                   <option value="€">{t('app.settings.currency_options.eur')}</option>
                   <option value="$">{t('app.settings.currency_options.usd')}</option>
