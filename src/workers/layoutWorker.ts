@@ -1,4 +1,4 @@
-import { PackerFactory, PackerTypes } from "../packer/PackerFactory";
+import { PackerFactory } from "../packer/PackerFactory";
 
 // Web Worker message handler
 self.onmessage = (e: MessageEvent) => {
@@ -6,7 +6,7 @@ self.onmessage = (e: MessageEvent) => {
   
   try {
     // new a packer
-    const packer = PackerFactory.createPacker(PackerTypes.LEFT_BOTTOM, settings);
+    const packer = PackerFactory.createPacker(settings);
     packer.addStockPanel(stockPanels);
     packer.addRequiredPanel(requiredPanels);
     const result = packer.pack();

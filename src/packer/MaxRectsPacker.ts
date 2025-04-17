@@ -47,12 +47,12 @@ export class MaxRectsPacker extends Packer {
       this.binHeight = height;
       this.allowRotations = rotations;
 
-      // Initialize free rectangle - start from (0,0) and add padding to dimensions
+      // Initialize free rectangle with actual stock panel dimensions
       const n: Size = { 
           x: 0, ///< Start from edge
           y: 0, ///< Start from edge
-          w: width + this.padding, ///< Add padding to width
-          h: height + this.padding ///< Add padding to height
+          w: width + this.padding, ///< Use actual width
+          h: height + this.padding///< Use actual height
       };
       this.usedRects = [];
       this.freeRects = [n];
@@ -103,42 +103,54 @@ export class MaxRectsPacker extends Packer {
                 let panelsPacked = 0;
                 while (reqPanel.quantity > 0) {
                     const insertedRect = this.insert(
-                        reqPanel.width, 
-                        reqPanel.length, 
+                        reqPanel.width + this.padding, 
+                        reqPanel.length + this.padding, 
                         MaxRectsPacker.BESTSHORTSIDEFIT
                     );
 
                     if (insertedRect.h > 0) {
-                        layout.cuts.push({
-                            x: insertedRect.x,
-                            y: insertedRect.y,
-                            width: insertedRect.w,
-                            length: insertedRect.h,
-                            label: reqPanel.label,
-                            color: reqPanel.color
-                        });
-                        reqPanel.quantity--;
-                        panelsPacked++;
+                        // Ensure the panel doesn't extend beyond stock panel boundaries
+                        if (insertedRect.x + insertedRect.w <= (this.binWidth + this.padding) && 
+                            insertedRect.y + insertedRect.h <= (this.binHeight + this.padding)) {
+                            layout.cuts.push({
+                                x: insertedRect.x,
+                                y: insertedRect.y,
+                                width: insertedRect.w - this.padding,
+                                length: insertedRect.h - this.padding,
+                                label: reqPanel.label,
+                                color: reqPanel.color
+                            });
+                            reqPanel.quantity--;
+                            panelsPacked++;
+                        } else {
+                            break; // Panel would extend beyond boundaries
+                        }
                     } else {
                         // Try rotated version if allowed
                         if (this.allowRotations) {
                             const rotatedRect = this.insert(
-                                reqPanel.length, 
-                                reqPanel.width, 
+                                reqPanel.length + this.padding, 
+                                reqPanel.width + this.padding, 
                                 MaxRectsPacker.BESTSHORTSIDEFIT
                             );
                             if (rotatedRect.h > 0) {
-                                layout.cuts.push({
-                                    x: rotatedRect.x,
-                                    y: rotatedRect.y,
-                                    width: rotatedRect.w,
-                                    length: rotatedRect.h,
-                                    label: reqPanel.label,
-                                    color: reqPanel.color,
-                                    rotated: true
-                                });
-                                reqPanel.quantity--;
-                                panelsPacked++;
+                                // Ensure the rotated panel doesn't extend beyond stock panel boundaries
+                                if (rotatedRect.x + rotatedRect.w <= this.binWidth && 
+                                    rotatedRect.y + rotatedRect.h <= this.binHeight) {
+                                    layout.cuts.push({
+                                        x: rotatedRect.x,
+                                        y: rotatedRect.y,
+                                        width: rotatedRect.w - this.padding, 
+                                        length: rotatedRect.h - this.padding, 
+                                        label: reqPanel.label,
+                                        color: reqPanel.color,
+                                        rotated: true
+                                    });
+                                    reqPanel.quantity--;
+                                    panelsPacked++;
+                                } else {
+                                    break; // Rotated panel would extend beyond boundaries
+                                }
                             } else {
                                 break; // No more fit in this stock panel
                             }
@@ -235,16 +247,16 @@ export class MaxRectsPacker extends Packer {
       const finalNode: Size = {
           x: newNode.x,
           y: newNode.y,
-          w: width,
-          h: height
+          w: newNode.w,
+          h: newNode.h
       };
 
-      // Place rectangle with padding added to occupied space
+      // Place rectangle with padding for spacing purposes
       this.placeRect({
           x: newNode.x,
           y: newNode.y,
-          w: width + this.padding,
-          h: height + this.padding
+          w: newNode.w,
+          h: newNode.h
       });
       
       return finalNode;
@@ -271,6 +283,7 @@ export class MaxRectsPacker extends Packer {
 
       for (const rect of this.freeRects) {
           // Try to place the Rect in upright (non-flipped) orientation.
+          // Consider padding when checking if it fits
           if (rect.w >= width && rect.h >= height) {
               const leftoverHoriz = Math.abs(rect.w - width);
               const leftoverVert = Math.abs(rect.h - height);
@@ -315,7 +328,8 @@ export class MaxRectsPacker extends Packer {
 
       for (const rect of this.freeRects) {
           // Try to place the Rect in upright (non-flipped) orientation.
-          if (rect.w >= width && rect.h >= height) {
+          // Consider padding when checking if it fits
+          if (rect.w >= width + this.padding && rect.h >= height + this.padding) {
               const topSideY = rect.y + height;
               if (topSideY < bestY || (topSideY === bestY && rect.x < bestX)) {
                   bestNode.x = rect.x;
@@ -327,7 +341,7 @@ export class MaxRectsPacker extends Packer {
               }
           }
 
-          if (this.allowRotations && rect.w >= height && rect.h >= width) {
+          if (this.allowRotations && rect.w >= height + this.padding && rect.h >= width + this.padding) {
               const topSideY = rect.y + width;
               if (topSideY < bestY || (topSideY === bestY && rect.x < bestX)) {
                   bestNode.x = rect.x;
@@ -349,9 +363,10 @@ export class MaxRectsPacker extends Packer {
 
       for (const rect of this.freeRects) {
           // Try to place the Rect in upright (non-flipped) orientation.
-          if (rect.w >= width && rect.h >= height) {
-              const leftoverHoriz = Math.abs(rect.w - width);
-              const leftoverVert = Math.abs(rect.h - height);
+          // Consider padding when checking if it fits
+          if (rect.w >= width + this.padding && rect.h >= height + this.padding) {
+              const leftoverHoriz = Math.abs(rect.w - (width + this.padding));
+              const leftoverVert = Math.abs(rect.h - (height + this.padding));
               const shortSideFit = Math.min(leftoverHoriz, leftoverVert);
               const longSideFit = Math.max(leftoverHoriz, leftoverVert);
 
@@ -366,9 +381,9 @@ export class MaxRectsPacker extends Packer {
               }
           }
 
-          if (this.allowRotations && rect.w >= height && rect.h >= width) {
-              const leftoverHoriz = Math.abs(rect.w - height);
-              const leftoverVert = Math.abs(rect.h - width);
+          if (this.allowRotations && rect.w >= height + this.padding && rect.h >= width + this.padding) {
+              const leftoverHoriz = Math.abs(rect.w - (height + this.padding));
+              const leftoverVert = Math.abs(rect.h - (width + this.padding));
               const shortSideFit = Math.min(leftoverHoriz, leftoverVert);
               const longSideFit = Math.max(leftoverHoriz, leftoverVert);
 
@@ -392,12 +407,14 @@ export class MaxRectsPacker extends Packer {
       bestAreaFit = Infinity;
 
       for (const rect of this.freeRects) {
-          const areaFit = rect.w * rect.h - width * height;
+          // Consider padding when calculating area fit
+          const areaFit = rect.w * rect.h - (width + this.padding) * (height + this.padding);
 
           // Try to place the Rect in upright (non-flipped) orientation.
-          if (rect.w >= width && rect.h >= height) {
-              const leftoverHoriz = Math.abs(rect.w - width);
-              const leftoverVert = Math.abs(rect.h - height);
+          // Consider padding when checking if it fits
+          if (rect.w >= width + this.padding && rect.h >= height + this.padding) {
+              const leftoverHoriz = Math.abs(rect.w - (width + this.padding));
+              const leftoverVert = Math.abs(rect.h - (height + this.padding));
               const shortSideFit = Math.min(leftoverHoriz, leftoverVert);
 
               if (areaFit < bestAreaFit || 
@@ -411,9 +428,9 @@ export class MaxRectsPacker extends Packer {
               }
           }
 
-          if (this.allowRotations && rect.w >= height && rect.h >= width) {
-              const leftoverHoriz = Math.abs(rect.w - height);
-              const leftoverVert = Math.abs(rect.h - width);
+          if (this.allowRotations && rect.w >= height + this.padding && rect.h >= width + this.padding) {
+              const leftoverHoriz = Math.abs(rect.w - (height + this.padding));
+              const leftoverVert = Math.abs(rect.h - (width + this.padding));
               const shortSideFit = Math.min(leftoverHoriz, leftoverVert);
 
               if (areaFit < bestAreaFit || 
@@ -437,7 +454,8 @@ export class MaxRectsPacker extends Packer {
 
       for (const rect of this.freeRects) {
           // Try to place the Rect in upright (non-flipped) orientation.
-          if (rect.w >= width && rect.h >= height) {
+          // Consider padding when checking if it fits
+          if (rect.w >= width + this.padding && rect.h >= height + this.padding) {
               const score = this.contactPointScoreNode(rect.x, rect.y, width, height);
               if (score > bestContactScore) {
                   bestNode.x = rect.x;
@@ -448,7 +466,7 @@ export class MaxRectsPacker extends Packer {
               }
           }
 
-          if (this.allowRotations && rect.w >= height && rect.h >= width) {
+          if (this.allowRotations && rect.w >= height + this.padding && rect.h >= width + this.padding) {
               const score = this.contactPointScoreNode(rect.x, rect.y, height, width);
               if (score > bestContactScore) {
                   bestNode.x = rect.x;
@@ -466,19 +484,19 @@ export class MaxRectsPacker extends Packer {
   private contactPointScoreNode(x: number, y: number, width: number, height: number): number {
       let score = 0;
 
-      if (x === 0 || x + width === this.binWidth) {
+      if (x === 0 || x + width + this.padding === this.binWidth) {
           score += height;
       }
-      if (y === 0 || y + height === this.binHeight) {
+      if (y === 0 || y + height + this.padding === this.binHeight) {
           score += width;
       }
 
       for (const rect of this.usedRects) {
-          if (rect.x === x + width || rect.x + rect.w === x) {
-              score += this.commonIntervalLength(rect.y, rect.y + rect.h, y, y + height);
+          if (rect.x === x + width + this.padding || rect.x + rect.w === x) {
+              score += this.commonIntervalLength(rect.y, rect.y + rect.h, y, y + height + this.padding);
           }
-          if (rect.y === y + height || rect.y + rect.h === y) {
-              score += this.commonIntervalLength(rect.x, rect.x + rect.w, x, x + width);
+          if (rect.y === y + height + this.padding || rect.y + rect.h === y) {
+              score += this.commonIntervalLength(rect.x, rect.x + rect.w, x, x + width + this.padding);
           }
       }
 

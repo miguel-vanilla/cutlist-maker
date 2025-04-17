@@ -2,21 +2,16 @@ import { Packer } from "./Packer";
 import { AppSettings } from "../types";
 import { LeftBottomPacker } from "./LeftBottomPacker";
 import { MaxRectsPacker } from "./MaxRectsPacker";
+import { PackerType } from "../types";
 
 // Define the constructor type that explicitly extends Packer
 type PackerConstructor = new (settings: AppSettings) => Packer;
-
-// Constants for packer type names
-export const PackerTypes = {
-    LEFT_BOTTOM: "LeftBottom",
-    MAX_RECTS: "MaxRects"
-} as const;
-
+//Packer's factory to create special packer
 export class PackerFactory {
     // The registry of packer
     private static packerRegistry: Map<string, PackerConstructor> = new Map([
-        [PackerTypes.LEFT_BOTTOM, LeftBottomPacker as PackerConstructor],
-        [PackerTypes.MAX_RECTS, MaxRectsPacker as PackerConstructor],
+        [PackerType.LEFTBOTTOM, LeftBottomPacker as PackerConstructor],
+        [PackerType.MAXRECTS, MaxRectsPacker as PackerConstructor],
         //other more packer
     ]);
 
@@ -27,10 +22,11 @@ export class PackerFactory {
      * @returns Packer instance
      * @throws Error if type doesn't exist
      */
-    public static createPacker(type: string, appSettings: AppSettings): Packer {
-        const PackerClass = this.packerRegistry.get(type);
+    public static createPacker(appSettings: AppSettings): Packer {
+        console.log("appSettings.packerType:" + appSettings.packerType);
+        const PackerClass = this.packerRegistry.get(appSettings.packerType);
         if (!PackerClass) {
-            throw new Error(`Unknown packer type: ${type}. Available types: ${Array.from(this.packerRegistry.keys()).join(", ")}`);
+            throw new Error(`Unknown packer type: ${appSettings.packerType}. Available types: ${Array.from(this.packerRegistry.keys()).join(", ")}`);
         }
         return new PackerClass(appSettings);
     }

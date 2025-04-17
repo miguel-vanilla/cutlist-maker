@@ -1,10 +1,26 @@
+// Constants
+export const Unit = {
+  MM: "mm",
+  CM: "cm",
+  INCHES: "inches",
+} as const;
 
-export type Unit = 'mm' | 'cm' | 'inches';
-export type Currency = '€' | '$' | '¥' | '¥';
+export const Currency = {
+  EURO: "€",
+  DOLLAR: "$",
+  YEN: "¥",
+  RMB: "¥",
+} as const;
+
+export const PackerType = {
+  LEFTBOTTOM: "LeftBottom",
+  MAXRECTS: "MaxRects",
+} as const;
 
 export interface AppSettings {
-  units: Unit;
-  currency: Currency;
+  packerType: typeof PackerType[keyof typeof PackerType];
+  units: typeof Unit[keyof typeof Unit];
+  currency: typeof Currency[keyof typeof Currency];
   kerfWidth: number;
   considerGrain: boolean;
   calculatePrice: boolean;
@@ -31,78 +47,82 @@ export interface RequiredPanel {
   index?: number; //the index of RequiredPanel
 }
 
-
 export interface AdjustedPanel extends RequiredPanel {
-    originalLength: number;
-    originalWidth: number;
-    canRotate: boolean;
-  }
-  
-  export interface CutFit {
-    x: number;
-    y: number;
-    width: number;
-    length: number;
-    label?: string;
-    color?: string;
-    efficiency: number;
-  }
-  
-  export interface SpaceMatrix {
-    grid: boolean[][];
-    markSpace: (x: number, y: number, width: number, height: number) => void;
-    isSpaceAvailable: (x: number, y: number, width: number, height: number) => boolean;
-    findNextPosition: () => { x: number; y: number } | null;
-  }
-  
-  export interface CalculationResult {
-    layouts: Array<{
-      cuts: Array<{
-        x: number;
-        y: number;
-        width: number;
-        length: number;
-        label?: string;
-        color?: string;
-      }>;
-    }>;
-    remainingPanels: AdjustedPanel[];
-    stats: {
-      totalStockArea: number;
-      totalRequiredArea: number;
-      materialYield: number;
-      stockPanelsUsed: number;
-      totalCutLength: number;
-      estimatedCost?: number;
-    };
-  }
+  originalLength: number;
+  originalWidth: number;
+  canRotate: boolean;
+}
 
-  export interface ResultsProps {
-    calculatePrice: boolean;
-    settings: {
-      currency: string;
-      kerfWidth: number;
-      considerGrain: boolean;
-      includeEdgeBanding: boolean;
-      edgeBandingThickness: number;
-      includeEdgeTrimming: boolean;
-      edgeTrimAmount: number;
-    };
-    stockPanels: StockPanel[];
-    requiredPanels: RequiredPanel[];
-  }
-  
-  export interface PanelLayout {
-    width: number;
-    length: number;
-    cuts: {
+export interface CutFit {
+  x: number;
+  y: number;
+  width: number;
+  length: number;
+  label?: string;
+  color?: string;
+  efficiency: number;
+}
+
+export interface SpaceMatrix {
+  grid: boolean[][];
+  markSpace: (x: number, y: number, width: number, height: number) => void;
+  isSpaceAvailable: (
+    x: number,
+    y: number,
+    width: number,
+    height: number
+  ) => boolean;
+  findNextPosition: () => { x: number; y: number } | null;
+}
+
+export interface CalculationResult {
+  layouts: Array<{
+    cuts: Array<{
       x: number;
       y: number;
       width: number;
       length: number;
       label?: string;
       color?: string;
-      rotated?: boolean;
-    }[];
-  }
-  
+    }>;
+  }>;
+  remainingPanels: AdjustedPanel[];
+  stats: {
+    totalStockArea: number;
+    totalRequiredArea: number;
+    materialYield: number;
+    stockPanelsUsed: number;
+    totalCutLength: number;
+    estimatedCost?: number;
+  };
+}
+
+export interface ResultsProps {
+  calculatePrice: boolean;
+  settings: {
+    currency: string;
+    kerfWidth: number;
+    considerGrain: boolean;
+    includeEdgeBanding: boolean;
+    edgeBandingThickness: number;
+    includeEdgeTrimming: boolean;
+    edgeTrimAmount: number;
+  };
+  stockPanels: StockPanel[];
+  requiredPanels: RequiredPanel[];
+}
+
+export interface PanelLayout {
+  width: number;
+  length: number;
+  cuts: {
+    x: number;
+    y: number;
+    width: number;
+    length: number;
+    label?: string;
+    color?: string;
+    rotated?: boolean;
+  }[];
+}
+

@@ -25,6 +25,11 @@
         "usd": "Dollar ($)",
         "jpy": "Yen (¥)",
         "cny": "RMB (¥)"
+      },
+      "packer": "Packing algorithm",
+      "packerType":{
+        "leftBottom": "LeftBottom",
+        "maxRects": "MaxRects"
       }
     },
     "panels": {
