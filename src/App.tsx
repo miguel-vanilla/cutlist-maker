@@ -177,8 +177,8 @@ function App() {
                 >
                   <option value="€">{t('app.settings.currency_options.eur')}</option>
                   <option value="$">{t('app.settings.currency_options.usd')}</option>
-                  <option value="¥">{t('app.settings.currency_options.jpy')}</option>
-                  <option value="¥">{t('app.settings.currency_options.cny')}</option>
+                  <option value="JPY ¥">{t('app.settings.currency_options.jpy')}</option>
+                  <option value="CNY ¥">{t('app.settings.currency_options.cny')}</option>
                 </select>
                 <CircleDollarSign className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
               </div>

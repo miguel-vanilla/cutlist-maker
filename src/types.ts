@@ -8,8 +8,8 @@ export const Unit = {
 export const Currency = {
   EURO: "€",
   DOLLAR: "$",
-  YEN: "¥",
-  RMB: "¥",
+  YEN: "JPY ¥",
+  RMB: "CNY ¥",
 } as const;
 
 export const PackerType = {
