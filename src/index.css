@@ -62,4 +62,9 @@
   .border {
     border: none !important;
   }
+
+  .print-background{
+    -webkit-print-color-adjust: exact; /* Chrome/Safari */
+    print-color-adjust: exact; /* 标准属性 */
+  }
 }

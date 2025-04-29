@@ -280,7 +280,7 @@ export function Results({ calculatePrice, stockPanels, requiredPanels, settings 
       </div>
 
       {/* Cutting Layout Visualization */}
-      <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-8 mb-4 bg-gray-50 dark:bg-gray-900">
+      <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-8 mb-4 bg-gray-50 dark:bg-gray-900 print-background">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
             {t('app.results.navigation.panel_of', { current: currentPanelIndex + 1, total: totalPanels })}
