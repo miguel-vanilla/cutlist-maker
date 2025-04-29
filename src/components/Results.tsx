@@ -1,9 +1,33 @@
 import React, { useEffect, useState } from 'react';
 import { Calculator, Printer, FileDown } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { jsPDF } from 'jspdf';
-import { StockPanel, ResultsProps, CalculationResult } from '../types';
+import { StockPanel, Cut, ResultsProps, CalculationResult } from '../types';
+import html2pdf from 'html2pdf.js';
 
+// Helper function to darken/lighten colors for borders
+function adjustColor(color: string, amount: number): string {
+  // 如果是十六进制颜色
+  if (color.startsWith('#')) {
+    const hex = color.replace('#', '');
+    const num = parseInt(hex, 16);
+    const r = Math.max(Math.min((num >> 16) + amount, 255), 0);
+    const g = Math.max(Math.min(((num >> 8) & 0x00FF) + amount, 255), 0);
+    const b = Math.max(Math.min((num & 0x0000FF) + amount, 255), 0);
+    return '#' + (g | (b << 8) | (r << 16)).toString(16).padStart(6, '0');
+  } 
+  // 如果是RGB格式
+  else if (color.startsWith('rgb')) {
+    const rgbValues = color.match(/\d+/g);
+    if (rgbValues && rgbValues.length >= 3) {
+      const r = Math.max(0, Math.min(255, parseInt(rgbValues[0]) + amount));
+      const g = Math.max(0, Math.min(255, parseInt(rgbValues[1]) + amount));
+      const b = Math.max(0, Math.min(255, parseInt(rgbValues[2]) + amount));
+      return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
+    }
+  }
+  // 默认返回
+  return '#999999';
+}
 
 export function Results({ calculatePrice, stockPanels, requiredPanels, settings }: ResultsProps) {
   const { t } = useTranslation();
@@ -20,81 +44,75 @@ export function Results({ calculatePrice, stockPanels, requiredPanels, settings 
   const handleDownloadPDF = () => {
     if (!result || !result.layouts || !stockPanels) return;
 
-    const doc = new jsPDF({
-      orientation: 'landscape',
-      unit: 'mm',
-      format: 'a4'
-    });
-
-    // Add title
-    doc.setFontSize(20);
-    doc.text(t('app.results.title'), 15, 20);
-
-    // Add statistics
-    doc.setFontSize(12);
-    doc.text([
+    // Create a container to hold all the content
+    const container = document.createElement('div');
+    container.style.width = '1123px'; // Width of A4 size (horizontal)
+    container.style.fontFamily = 'Arial, "Microsoft YaHei", "微软雅黑", STXihei, "华文细黑", sans-serif'; // Add Chinese font support
+    
+    // Add Title
+    const title = document.createElement('h1');
+    title.textContent = t('app.results.title');
+    title.style.fontSize = '24px';
+    title.style.marginBottom = '40px';
+    container.appendChild(title);
+    
+    // Add statistical information
+    const stats = document.createElement('div');
+    stats.style.fontSize = '14px';
+    stats.style.marginBottom = '40px';
+    
+    const statItems = [
       `${t('app.results.stockArea')}: ${(result.stats.totalStockArea / 1000000).toFixed(2)} m²`,
       `${t('app.results.requiredArea')}: ${(result.stats.totalRequiredArea / 1000000).toFixed(2)} m²`,
       `${t('app.results.yield')}: ${result.stats.materialYield.toFixed(1)}%`,
       `${t('app.results.panelsUsed')}: ${result.stats.stockPanelsUsed}`,
       `${t('app.results.cutLength')}: ${(result.stats.totalCutLength / 1000).toFixed(1)} m`,
       result.stats.estimatedCost ? `${t('app.results.cost')}: ${settings.currency}${result.stats.estimatedCost.toFixed(2)}` : ''
-    ].filter(Boolean), 15, 35);
-
-    // Create reusable canvas
-    const canvas = document.createElement('canvas');
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+    ].filter(Boolean);
     
-    // Set canvas size (A4 landscape dimensions in pixels at 96 DPI)
-    canvas.width = 1123;  // 297mm * 3.78 pixels/mm
-    canvas.height = 794;  // 210mm * 3.78 pixels/mm
+    statItems.forEach(item => {
+      const p = document.createElement('p');
+      p.textContent = item;
+      p.style.margin = '5px 0';
+      stats.appendChild(p);
+    });
     
-    // Track current stock panel index
-    let panelCount = 0;
+    container.appendChild(stats);
     
-    // Iterate through all layouts
-    for (let i = 0; i < result.layouts.length; i++) {
-      const layout = result.layouts[i];
-      
-      // Find the corresponding stock panel
-      let stockPanel: StockPanel | undefined;
-      let currentCount = 0;
-      
-      for (const panel of stockPanels) {
-        if (i < currentCount + panel.quantity) {
-          stockPanel = panel;
-          break;
-        }
-        currentCount += panel.quantity;
-      }
-      
-      if (!stockPanel || !layout) continue;
-      
-      // Add new page for each panel after the first
-      if (i > 0) {
-        doc.addPage();
-      }
+    // Create a function to draw a panel
+    const createPanelElement = (layout: { cuts: Array<Cut>; }, stockPanel:StockPanel, index: number, totalPanels: number) => {
+      const panelContainer = document.createElement('div');
+      panelContainer.style.pageBreakBefore = index > 0 ? 'always' : 'auto';
+      panelContainer.style.marginBottom = '30px';
       
       // Add panel title
-      doc.setFontSize(16);
-      doc.text(t('app.results.navigation.panel_of', { current: i + 1, total: totalPanels }) + 
-               ` (${stockPanel.length} × ${stockPanel.width} mm)`, 15, 80);
+      const panelTitle = document.createElement('h2');
+      panelTitle.textContent = t('app.results.navigation.panel_of', { current: index + 1, total: totalPanels }) + 
+                             ` (${stockPanel.length} × ${stockPanel.width} mm)`;
+      panelTitle.style.fontSize = '18px';
+      panelTitle.style.marginBottom = '10px';
+      panelContainer.appendChild(panelTitle);
       
-      // Clear canvas
-      ctx.fillStyle = 'white';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      // Drawing panels using Canvas
+      const canvas = document.createElement('canvas');
+      canvas.width = 1000;
+      canvas.height = 600;
+      const ctx = canvas.getContext('2d');
       
-      // Calculate scale factors
+      if (!ctx) return panelContainer;
+      
+      // Calculate scaling factor
       const scaleX = canvas.width / stockPanel.length;
       const scaleY = canvas.height / stockPanel.width;
-      const scale = Math.min(scaleX, scaleY) * 0.8; // 80% of available space
+      const scale = Math.min(scaleX, scaleY) * 0.8; // 80%的可用空间
       
-      // Calculate centered position
+      // Calculate the center position
       const startX = (canvas.width - stockPanel.length * scale) / 2;
       const startY = (canvas.height - stockPanel.width * scale) / 2;
       
-      // Draw stock panel border
+      // Draw the bottom panel border
+      ctx.fillStyle = 'white';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.strokeStyle = '#666';
       ctx.lineWidth = 2;
       ctx.strokeRect(
@@ -104,9 +122,9 @@ export function Results({ calculatePrice, stockPanels, requiredPanels, settings 
         stockPanel.width * scale
       );
       
-      // Draw cuts
+      // Draw the cutting section
       layout.cuts.forEach(cut => {
-        // Draw cut rectangle
+        // Draw a cutting rectangle
         ctx.fillStyle = cut.color || '#e5e7eb';
         ctx.strokeStyle = cut.color ? adjustColor(cut.color, -20) : '#9ca3af';
         ctx.lineWidth = 1;
@@ -121,7 +139,7 @@ export function Results({ calculatePrice, stockPanels, requiredPanels, settings 
         
         // Add labels
         ctx.fillStyle = '#333';
-        ctx.font = '12px Inter';
+        ctx.font = '12px Arial, "Microsoft YaHei"';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         
@@ -136,34 +154,86 @@ export function Results({ calculatePrice, stockPanels, requiredPanels, settings 
         });
       });
       
-      // Add the canvas image
-      const imageData = canvas.toDataURL('image/jpeg', 0.95);
-      doc.addImage(imageData, 'JPEG', 15, 90, 267, 150);
-    }
-
-    let yOffset = 250;
-
-    // Add remaining panels if any
-    if (result.remainingPanels.length > 0) {
-      if (yOffset > 250) {
-        doc.addPage();
-        yOffset = 20;
+      panelContainer.appendChild(canvas);
+      return panelContainer;
+    };
+    
+    // Track the current inventory panel index
+    const totalPanelsCount = result.layouts.length;
+    
+    // Traverse all layouts
+    for (let i = 0; i < result.layouts.length; i++) {
+      const layout = result.layouts[i];
+      
+      // Find the corresponding inventory panel
+      let stockPanel;
+      let currentCount = 0;
+      
+      for (const panel of stockPanels) {
+        if (i < currentCount + panel.quantity) {
+          stockPanel = panel;
+          break;
+        }
+        currentCount += panel.quantity;
       }
-
-      doc.setFontSize(14);
-      doc.text(t('app.results.remaining.title'), 15, yOffset);
-      yOffset += 10;
-
-      result.remainingPanels.forEach((panel, index) => {
-        doc.setFontSize(12);
-        doc.text(`${panel.label || t('app.results.remaining.panel', { number: index + 1 })}: ${panel.length} × ${panel.width} mm`, 20, yOffset);
-        yOffset += 7;
-      });
+      
+      if (!stockPanel || !layout) continue;
+      
+      // Add panel
+      const panelElement = createPanelElement(layout, stockPanel, i, totalPanelsCount);
+      container.appendChild(panelElement);
     }
-
-    // Save the PDF
-    doc.save('cutting-layout.pdf');
+    
+    // Add remaining panels (if any)
+    if (result.remainingPanels.length > 0) {
+      const remainingTitle = document.createElement('h2');
+      remainingTitle.textContent = t('app.results.remaining.title');
+      remainingTitle.style.fontSize = '18px';
+      remainingTitle.style.marginTop = '20px';
+      remainingTitle.style.pageBreakBefore = 'always';
+      container.appendChild(remainingTitle);
+      
+      const remainingList = document.createElement('ul');
+      
+      result.remainingPanels.forEach((panel, index) => {
+        const item = document.createElement('li');
+        item.textContent = `${panel.label || t('app.results.remaining.panel', { number: index + 1 })}: ${panel.length} × ${panel.width} mm`;
+        item.style.fontSize = '14px';
+        item.style.margin = '5px 0';
+        remainingList.appendChild(item);
+      });
+      
+      container.appendChild(remainingList);
+    }
+    
+    // Create a temporary hidden container
+    const tempContainer = document.createElement('div');
+    tempContainer.appendChild(container);
+    tempContainer.style.position = 'absolute';
+    tempContainer.style.left = '-9999px';
+    document.body.appendChild(tempContainer);
+    
+    // Configure html2pdf options
+    const options = {
+      margin: 10,
+      filename: 'cutting-layout.pdf',
+      image: { type: 'jpeg', quality: 0.95 },
+      html2canvas: { scale: 2, useCORS: true },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+    };
+    
+    // Generate PDF
+    html2pdf().set(options).from(container).save()
+      .then(() => {
+        // 移除临时容器
+        document.body.removeChild(tempContainer);
+      })
+      .catch((error: Error) => {
+        console.error('PDF generation error:', error);
+        document.body.removeChild(tempContainer);
+      });
   };
+
 
   // Get the current stock panel dimensions
   const currentStockPanel = React.useMemo(() => {
@@ -392,12 +462,3 @@ export function Results({ calculatePrice, stockPanels, requiredPanels, settings 
   );
 }
 
-// Helper function to darken/lighten colors for borders
-function adjustColor(color: string, amount: number): string {
-  const hex = color.replace('#', '');
-  const num = parseInt(hex, 16);
-  const r = Math.max(Math.min((num >> 16) + amount, 255), 0);
-  const g = Math.max(Math.min(((num >> 8) & 0x00FF) + amount, 255), 0);
-  const b = Math.max(Math.min((num & 0x0000FF) + amount, 255), 0);
-  return '#' + (g | (b << 8) | (r << 16)).toString(16).padStart(6, '0');
-}

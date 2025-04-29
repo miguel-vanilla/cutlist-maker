@@ -74,17 +74,18 @@ export interface SpaceMatrix {
   ) => boolean;
   findNextPosition: () => { x: number; y: number } | null;
 }
+export interface Cut{
+  x: number;
+  y: number;
+  width: number;
+  length: number;
+  label?: string;
+  color?: string;
+}
 
 export interface CalculationResult {
   layouts: Array<{
-    cuts: Array<{
-      x: number;
-      y: number;
-      width: number;
-      length: number;
-      label?: string;
-      color?: string;
-    }>;
+    cuts: Array<Cut>;
   }>;
   remainingPanels: AdjustedPanel[];
   stats: {
