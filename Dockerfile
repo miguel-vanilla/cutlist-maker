@@ -1,18 +1,21 @@
-FROM node:20-alpine
+FROM nginx:alpine
 
-WORKDIR /app
+# Copy pre-built files directly
+COPY ./dist /usr/share/nginx/html
 
-# Copy everything at once
-COPY . .
+# Nginx config for SPA
+RUN echo 'server {\
+    listen 80;\
+    server_name _;\
+    root /usr/share/nginx/html;\
+    index index.html;\
+    location / {\
+        try_files $uri $uri/ /index.html;\
+    }\
+}' > /etc/nginx/conf.d/default.conf
 
-# Install dependencies and build
-RUN npm install && npm run build
+# Expose port 80
+EXPOSE 80
 
-# Install a simple server to serve the static files
-RUN npm install -g serve
-
-# Expose the port the app runs on
-EXPOSE 3000
-
-# Command to run the app
-CMD ["serve", "-s", "dist", "-l", "3000"]
+# Start Nginx
+CMD ["nginx", "-g", "daemon off;"]
